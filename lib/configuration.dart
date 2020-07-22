@@ -1,13 +1,11 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/controller.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
-import 'package:flutter/foundation.dart';
 
-/**
- * 配置信息类
- */
+/// 配置信息类
 class CalendarConfiguration {
   //默认是单选,可以配置为MODE_SINGLE_SELECT，MODE_MULTI_SELECT
   int selectMode;
@@ -63,10 +61,8 @@ class CalendarConfiguration {
   OnMultiSelectOutOfRange multiSelectOutOfRange; //多选超出指定范围
   OnMultiSelectOutOfSize multiSelectOutOfSize; //多选超出限制个数
 
-  ObserverList<OnMonthChange> monthChangeListeners =
-      ObserverList<OnMonthChange>(); //保存多个月份监听的事件
-  ObserverList<OnWeekChange> weekChangeListeners =
-      ObserverList<OnWeekChange>(); //周视图切换
+  ObserverList<OnMonthChange> monthChangeListeners = ObserverList<OnMonthChange>(); //保存多个月份监听的事件
+  ObserverList<OnWeekChange> weekChangeListeners = ObserverList<OnWeekChange>(); //周视图切换
 
   /**
    * 下面的信息不是配置的，是根据配置信息进行计算出来的

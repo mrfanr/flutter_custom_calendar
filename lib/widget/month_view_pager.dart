@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/calendar_provider.dart';
 import 'package:flutter_custom_calendar/configuration.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
-import 'package:flutter_custom_calendar/utils/LogUtil.dart';
+import 'package:flutter_custom_calendar/utils/log_util.dart';
 import 'package:flutter_custom_calendar/widget/month_view.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +13,7 @@ class MonthViewPager extends StatefulWidget {
   _MonthViewPagerState createState() => _MonthViewPagerState();
 }
 
-class _MonthViewPagerState extends State<MonthViewPager>
-    with AutomaticKeepAliveClientMixin {
+class _MonthViewPagerState extends State<MonthViewPager> with AutomaticKeepAliveClientMixin {
   CalendarProvider calendarProvider;
 
   @override
@@ -61,8 +60,7 @@ class _MonthViewPagerState extends State<MonthViewPager>
     LogUtil.log(TAG: this.runtimeType, message: "MonthViewPager build");
 //    获取到当前的CalendarProvider对象,设置listen为false，不需要刷新
     calendarProvider = Provider.of<CalendarProvider>(context, listen: false);
-    CalendarConfiguration configuration =
-        calendarProvider.calendarConfiguration;
+    CalendarConfiguration configuration = calendarProvider.calendarConfiguration;
 
     return PageView.builder(
       onPageChanged: (position) {

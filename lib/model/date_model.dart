@@ -1,9 +1,7 @@
 import 'package:flutter_custom_calendar/utils/date_util.dart';
 import 'package:flutter_custom_calendar/utils/lunar_util.dart';
 
-/**
- * 日期的实体类
- */
+/// 日期的实体类
 class DateModel {
   int year;
   int month;
@@ -44,8 +42,7 @@ class DateModel {
   }
 
 //传统农历节日
-  String get traditionFestival =>
-      LunarUtil.getTraditionFestival(lunarYear, lunarMonth, lunarDay);
+  String get traditionFestival => LunarUtil.getTraditionFestival(lunarYear, lunarMonth, lunarDay);
 
   bool isCurrentMonth; //是否是当前月份
 
@@ -53,8 +50,7 @@ class DateModel {
 
   bool isInRange = false; //是否在范围内,比如可以实现在某个范围外，设置置灰的功能
   bool isSelected; //是否被选中，用来实现一些标记或者选择功能
-  bool isCanClick =
-      true; //todo:是否可点击：设置范围外的日历不可点击，或者可以通过自定义拦截点击事件来设置true或者false
+  bool isCanClick = true; //todo:是否可点击：设置范围外的日历不可点击，或者可以通过自定义拦截点击事件来设置true或者false
   //是否是周末
   bool get isWeekend => DateUtil.isWeekend(getDateTime());
 
@@ -86,8 +82,7 @@ class DateModel {
       ..year = dateTime.year
       ..month = dateTime.month
       ..day = dateTime.day;
-    List<int> lunar =
-        LunarUtil.solarToLunar(dateModel.year, dateModel.month, dateModel.day);
+    List<int> lunar = LunarUtil.solarToLunar(dateModel.year, dateModel.month, dateModel.day);
     dateModel.lunar = lunar;
 
 //    将数据的初始化放到各个get方法里面进行操作，类似懒加载,不然很浪费
@@ -109,9 +104,7 @@ class DateModel {
 
   //是否是同一天
   bool isSameWith(DateModel dateModel) {
-    return year == dateModel.year &&
-        month == dateModel.month &&
-        day == dateModel.day;
+    return year == dateModel.year && month == dateModel.month && day == dateModel.day;
   }
 
   //是否在某天之后

@@ -1,11 +1,8 @@
 import 'package:flutter_custom_calendar/constants/constants.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
-import 'package:flutter_custom_calendar/utils/date_util.dart';
 import 'package:flutter_custom_calendar/utils/solar_term_util.dart';
 
-/**
- * 农历的工具类
- */
+/// 农历的工具类
 class LunarUtil {
   static List<int> LUNAR_MONTH_DAYS = [
     1887,
@@ -864,12 +861,7 @@ class LunarUtil {
   static int solarToInt(int y, int m, int d) {
     m = (m + 9) % 12;
     y = y - (m / 10).toInt();
-    return (365 * y +
-        (y / 4).toInt() -
-        (y / 100).toInt() +
-        (y / 400).toInt() +
-        ((m * 306 + 5) / 10).toInt() +
-        (d - 1));
+    return (365 * y + (y / 4).toInt() - (y / 100).toInt() + (y / 400).toInt() + ((m * 306 + 5) / 10).toInt() + (d - 1));
   }
 
   /**
@@ -926,8 +918,7 @@ class LunarUtil {
   }
 
   static String getString(int month, int day) {
-    return (month >= 10 ? month.toString() : "0$month") +
-        (day >= 10 ? day.toString() : "0$day");
+    return (month >= 10 ? month.toString() : "0$month") + (day >= 10 ? day.toString() : "0$day");
   }
 
   /**
@@ -1030,11 +1021,9 @@ class LunarUtil {
     int week = (dateTime.weekday + 1) % 8;
     int startDiff = 7 - week + 1;
     if (startDiff == 7) {
-      festivals[0] =
-          dateToString(year, 5, startDiff + 1) + SPECIAL_FESTIVAL_STR[0];
+      festivals[0] = dateToString(year, 5, startDiff + 1) + SPECIAL_FESTIVAL_STR[0];
     } else {
-      festivals[0] =
-          dateToString(year, 5, startDiff + 7 + 1) + SPECIAL_FESTIVAL_STR[0];
+      festivals[0] = dateToString(year, 5, startDiff + 7 + 1) + SPECIAL_FESTIVAL_STR[0];
     }
 
     //父亲节
@@ -1043,11 +1032,9 @@ class LunarUtil {
     week = (dateTime.weekday + 1) % 8;
     startDiff = 7 - week + 1;
     if (startDiff == 7) {
-      festivals[1] =
-          dateToString(year, 6, startDiff + 7 + 1) + SPECIAL_FESTIVAL_STR[1];
+      festivals[1] = dateToString(year, 6, startDiff + 7 + 1) + SPECIAL_FESTIVAL_STR[1];
     } else {
-      festivals[1] = dateToString(year, 6, startDiff + 7 + 7 + 1) +
-          SPECIAL_FESTIVAL_STR[1];
+      festivals[1] = dateToString(year, 6, startDiff + 7 + 7 + 1) + SPECIAL_FESTIVAL_STR[1];
     }
 
     //感恩节
@@ -1056,11 +1043,9 @@ class LunarUtil {
 
     startDiff = 7 - week + 1;
     if (startDiff <= 2) {
-      festivals[2] =
-          dateToString(year, 11, startDiff + 21 + 5) + SPECIAL_FESTIVAL_STR[2];
+      festivals[2] = dateToString(year, 11, startDiff + 21 + 5) + SPECIAL_FESTIVAL_STR[2];
     } else {
-      festivals[2] =
-          dateToString(year, 11, startDiff + 14 + 5) + SPECIAL_FESTIVAL_STR[2];
+      festivals[2] = dateToString(year, 11, startDiff + 14 + 5) + SPECIAL_FESTIVAL_STR[2];
     }
     return festivals;
   }

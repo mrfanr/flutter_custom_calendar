@@ -3,14 +3,10 @@ import 'dart:math';
 
 import 'package:flutter_custom_calendar/utils/math_util.dart';
 
-/**
- * http://www.cnblogs.com/moodlxs/archive/2010/12/18/2345392.html
- * 24节气计算公式，参考该博客实现
- */
+/// http://www.cnblogs.com/moodlxs/archive/2010/12/18/2345392.html
+/// 24节气计算公式，参考该博客实现
 class SolarTermUtil {
-  /**
-   * 24节气
-   */
+  /// 24节气
   static List<String> SOLAR_TERMS = [
     "春分",
     "清明",
@@ -38,25 +34,17 @@ class SolarTermUtil {
     "惊蛰",
   ];
 
-  /**
-   * 每弧度的角秒数
-   */
+  /// 每弧度的角秒数
   static final double SECOND_PER_RAD = 180 * 3600 / pi;
 
-  /**
-   * 每弧度的角度数
-   */
+  /// 每弧度的角度数
   static final double ANGLE_PER_RAD = 180 / pi;
 
-  /**
-   * 日历计算
-   * 2000年前儒略日数(2000-1-1)
-   */
+  /// 日历计算
+  /// 2000年前儒略日数(2000-1-1)
   static final double J2000 = 2451545;
 
-  /**
-   * 黄赤交角系数表
-   */
+  /// 黄赤交角系数表
   static final List<double> H_C_ANGLE_TABLE = [
     0,
     50287.92262,
@@ -68,9 +56,7 @@ class SolarTermUtil {
     0.00001
   ];
 
-  /**
-   * 世界时与原子时之差计算表
-   */
+  /// 世界时与原子时之差计算表
   static final List<double> DTS = [
     -4000,
     108371.7,
@@ -175,23 +161,17 @@ class SolarTermUtil {
     6000
   ];
 
-  /**
-   * 离心率
-   */
+  /// 离心率
   static final List<double> GXC_E = [0.016708634, -0.000042037, -0.0000001267];
 
-  /**
-   * 近点
-   */
+  /// 近点
   static final List<double> GXC_P = [
     102.93735 / ANGLE_PER_RAD,
     1.71946 / ANGLE_PER_RAD,
-    0.00046 / ANGLE_PER_RAD
+    0.00046 / ANGLE_PER_RAD,
   ];
 
-  /**
-   * 太平黄经
-   */
+  /// 太平黄经
   static final List<double> GXC_L = [
     280.4664567 / ANGLE_PER_RAD,
     36000.76982779 / ANGLE_PER_RAD,
@@ -200,29 +180,23 @@ class SolarTermUtil {
     -1 / 153000000 / ANGLE_PER_RAD
   ];
 
-  /**
-   * 光行差常数
-   */
+  /// 光行差常数
   static final double GXC_K = 20.49552 / SECOND_PER_RAD;
 
-  /**
-   * 向下取整
-   *
-   * @param v v
-   * @return 取整数部分
-   */
+  /// 向下取整
+  ///
+  /// @param v v
+  /// @return 取整数部分
   static double doubleFloor(double v) {
     v = v.floor().toDouble();
     if (v < 0) return v + 1;
     return v;
   }
 
-  /**
-   * 对超过0-2PI的角度转为0-2PI
-   *
-   * @param v v
-   * @return 对超过0-2PI的角度转为0-2PI
-   */
+  /// 对超过0-2PI的角度转为0-2PI
+  ///
+  /// @param v v
+  /// @return 对超过0-2PI的角度转为0-2PI
   static double rad2mrad(double v) {
     v = v % (2 * pi);
     if (v < 0) return v + 2 * pi;
@@ -230,12 +204,10 @@ class SolarTermUtil {
     return v;
   }
 
-  /**
-   * 计算世界时与原子时之差,传入年
-   *
-   * @param year 年
-   * @return 计算世界时与原子时之差
-   */
+  /// 计算世界时与原子时之差,传入年
+  ///
+  /// @param year 年
+  /// @return 计算世界时与原子时之差
   static double worldTimeDiff(double year) {
     int i;
     for (i = 0; i < 100; i += 5) if (year < DTS[i + 5] || i == 95) break;
@@ -246,22 +218,18 @@ class SolarTermUtil {
     return DTS[i + 1] + DTS[i + 2] * t1 + DTS[i + 3] * t2 + DTS[i + 4] * t3;
   }
 
-  /**
-   * 传入儒略日(J2000起算),计算UTC与原子时的差(单位:日)
-   *
-   * @param julian 儒略日
-   * @return 计算UTC与原子时的差
-   */
+  /// 传入儒略日(J2000起算),计算UTC与原子时的差(单位:日)
+  ///
+  /// @param julian 儒略日
+  /// @return 计算UTC与原子时的差
   static double atomTimeDiff(double julian) {
     return worldTimeDiff(julian / 365.2425 + 2000) / 86400.0;
   }
 
-  /**
-   * 公历转儒略日,UTC=1表示原日期是UTC
-   *
-   * @param UTC UTC
-   * @return 公历转儒略日, UTC=1表示原日期是UTC
-   */
+  /// 公历转儒略日,UTC=1表示原日期是UTC
+  ///
+  /// @param UTC UTC
+  /// @return 公历转儒略日, UTC=1表示原日期是UTC
   static double toJulian(Time time, bool UTC) {
     double y = time.year; // 取出年月
     double m = time.month;
@@ -274,7 +242,7 @@ class SolarTermUtil {
 
     if (time.year * 372 + time.month * 31 + time.day >= 588829) {
 // 判断是否为格里高利历日1582*372+10*31+15
-      n = doubleFloor(y / 100);
+      n = doubleFloor(y / 100) as double;
       n = 2 - n + doubleFloor(n / 4); // 加百年闰
     }
 
@@ -355,11 +323,7 @@ class SolarTermUtil {
     double t2 = t1 * t1;
     double t3 = t2 * t1;
     double t4 = t3 * t1;
-    double L = GXC_L[0] +
-        GXC_L[1] * t1 +
-        GXC_L[2] * t2 +
-        GXC_L[3] * t3 +
-        GXC_L[4] * t4;
+    double L = GXC_L[0] + GXC_L[1] * t1 + GXC_L[2] * t2 + GXC_L[3] * t3 + GXC_L[4] * t4;
     double p = GXC_P[0] + GXC_P[1] * t1 + GXC_P[2] * t2;
     double e = GXC_E[0] + GXC_E[1] * t1 + GXC_E[2] * t2;
     double dL = L - zb[0], dP = p - zb[0];
@@ -403,11 +367,7 @@ class SolarTermUtil {
     t /= 36525;
     double c, t1 = t, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1; // t5=t4*t1;
     for (int i = 0; i < nutB.length; i += 9) {
-      c = nutB[i] +
-          nutB[i + 1] * t1 +
-          nutB[i + 2] * t2 +
-          nutB[i + 3] * t3 +
-          nutB[i + 4] * t4;
+      c = nutB[i] + nutB[i + 1] * t1 + nutB[i + 2] * t2 + nutB[i + 3] * t3 + nutB[i + 4] * t4;
       d.Lon += (nutB[i + 5] + nutB[i + 6] * t / 10) * sin(c); // 黄经章动
       d.Obl += (nutB[i + 7] + nutB[i + 8] * t / 10) * cos(c); // 交角章动
     }
@@ -811,16 +771,8 @@ class SolarTermUtil {
     3.14159265359,
     0.0000000000
   ];
-  static final List<double> E32 = [
-    0.00004359385,
-    5.78455133738,
-    6283.0758499914
-  ];
-  static final List<double> E33 = [
-    0.00000144595,
-    4.27319435148,
-    6283.0758499914
-  ];
+  static final List<double> E32 = [0.00004359385, 5.78455133738, 6283.0758499914];
+  static final List<double> E33 = [0.00000144595, 4.27319435148, 6283.0758499914];
 
 //月球运动参数
   static final List<double> M10 = [
@@ -2004,8 +1956,7 @@ class SolarTermUtil {
    */
   static double Enn(List<double> F) {
     double v = 0;
-    for (int i = 0; i < F.length; i += 3)
-      v += F[i] * cos(F[i + 1] + EnnT * F[i + 2]);
+    for (int i = 0; i < F.length; i += 3) v += F[i] * cos(F[i + 1] + EnnT * F[i + 2]);
     return v;
   }
 
@@ -2019,12 +1970,7 @@ class SolarTermUtil {
     EnnT = jd / 365250;
     List<double> llr = new List(3);
     double t1 = EnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1, t5 = t4 * t1;
-    llr[0] = Enn(E10) +
-        Enn(E11) * t1 +
-        Enn(E12) * t2 +
-        Enn(E13) * t3 +
-        Enn(E14) * t4 +
-        Enn(E15) * t5;
+    llr[0] = Enn(E10) + Enn(E11) * t1 + Enn(E12) * t2 + Enn(E13) * t3 + Enn(E14) * t4 + Enn(E15) * t5;
     llr[1] = Enn(E20) + Enn(E21) * t1;
     llr[2] = Enn(E30) + Enn(E31) * t1 + Enn(E32) * t2 + Enn(E33) * t3;
     llr[0] = rad2mrad(llr[0]);
@@ -2043,12 +1989,7 @@ class SolarTermUtil {
   static double Mnn(List<double> F) {
     double v = 0, t1 = MnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
     for (int i = 0; i < F.length; i += 6)
-      v += F[i] *
-          sin(F[i + 1] +
-              t1 * F[i + 2] +
-              t2 * F[i + 3] +
-              t3 * F[i + 4] +
-              t4 * F[i + 5]);
+      v += F[i] * sin(F[i + 1] + t1 * F[i + 2] + t2 * F[i + 3] + t3 * F[i + 4] + t4 * F[i + 5]);
     return v;
   }
 
@@ -2065,8 +2006,7 @@ class SolarTermUtil {
     llr[0] = (Mnn(M10) + Mnn(M11) * t1 + Mnn(M12) * t2) / SECOND_PER_RAD;
     llr[1] = (Mnn(M20) + Mnn(M21) * t1) / SECOND_PER_RAD;
     llr[2] = (Mnn(M30) + Mnn(M31) * t1) * 0.999999949827;
-    llr[0] =
-        llr[0] + M1n[0] + M1n[1] * t1 + M1n[2] * t2 + M1n[3] * t3 + M1n[4] * t4;
+    llr[0] = llr[0] + M1n[0] + M1n[1] * t1 + M1n[2] * t2 + M1n[3] * t3 + M1n[4] * t4;
     llr[0] = rad2mrad(llr[0]); // 地心Date黄道原点坐标(不含岁差)
     precession(julian, llr); // 补岁差
     return llr;

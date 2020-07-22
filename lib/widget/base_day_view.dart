@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/controller.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
 
-/**
- * 通过canvas自定义item，只需实现相关的方法就可以
- */
+/// 通过canvas自定义item，只需实现相关的方法就可以
 abstract class BaseCustomDayWidget extends StatelessWidget {
   final DateModel dateModel;
 
@@ -15,14 +13,10 @@ abstract class BaseCustomDayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: new CustomPaint(
+      child: CustomPaint(
         painter:
             //根据isSelected标志获取对应的item
-            dateModel.isSelected
-                ? new CustomDayWidgetPainter(dateModel,
-                    drawDayWidget: drawSelected)
-                : new CustomDayWidgetPainter(dateModel,
-                    drawDayWidget: drawNormal),
+            CustomDayWidgetPainter(dateModel, drawDayWidget: dateModel.isSelected ? drawSelected : drawNormal),
       ),
     );
   }
@@ -52,9 +46,7 @@ class CustomDayWidgetPainter extends CustomPainter {
   }
 }
 
-/**
- * 通过组合widget创建item，只需实现相关的方法就可以
- */
+/// 通过组合widget创建item，只需实现相关的方法就可以
 abstract class BaseCombineDayWidget extends StatelessWidget {
   final DateModel dateModel;
 
@@ -62,9 +54,7 @@ abstract class BaseCombineDayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return dateModel.isSelected
-        ? getSelectedWidget(dateModel)
-        : getNormalWidget(dateModel);
+    return dateModel.isSelected ? getSelectedWidget(dateModel) : getNormalWidget(dateModel);
   }
 
   Widget getNormalWidget(DateModel dateModel);

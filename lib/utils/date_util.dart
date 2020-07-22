@@ -1,22 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
-import 'package:flutter_custom_calendar/utils/LogUtil.dart';
+import 'package:flutter_custom_calendar/utils/log_util.dart';
 
-/**
- * 工具类
- */
+/// 工具类
 class DateUtil {
-  /**
-   * 判断一个日期是否是周末，即周六日
-   */
+  /// 判断一个日期是否是周末，即周六日
   static bool isWeekend(DateTime dateTime) {
-    return dateTime.weekday == DateTime.saturday ||
-        dateTime.weekday == DateTime.sunday;
+    return dateTime.weekday == DateTime.saturday || dateTime.weekday == DateTime.sunday;
   }
 
-  /**
-   * 获取某年的天数
-   */
+  /// 获取某年的天数
   static int getYearDaysCount(int year) {
     if (isLeapYear(year)) {
       return 366;
@@ -24,23 +16,15 @@ class DateUtil {
     return 365;
   }
 
-  /**
-   * 获取某月的天数
-   *
-   * @param year  年
-   * @param month 月
-   * @return 某月的天数
-   */
+  /// 获取某月的天数
+  ///
+  /// @param year  年
+  /// @param month 月
+  /// @return 某月的天数
   static int getMonthDaysCount(int year, int month) {
     int count = 0;
     //判断大月份
-    if (month == 1 ||
-        month == 3 ||
-        month == 5 ||
-        month == 7 ||
-        month == 8 ||
-        month == 10 ||
-        month == 12) {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
       count = 31;
     }
 
@@ -60,46 +44,36 @@ class DateUtil {
     return count;
   }
 
-  /**
-   * 是否是今天
-   */
+  /// 是否是今天
   static bool isCurrentDay(int year, int month, int day) {
     DateTime now = DateTime.now();
     return now.year == year && now.month == month && now.day == day;
   }
 
-  /**
-   * 是否是闰年
-   */
+  /// 是否是闰年
   static bool isLeapYear(int year) {
     return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
   }
 
-  /**
-   * 本月的第几周
-   */
+  /// 本月的第几周
   static int getIndexWeekInMonth(DateTime dateTime) {
-    DateTime firstdayInMonth = new DateTime(dateTime.year, dateTime.month, 1);
-    Duration duration = dateTime.difference(firstdayInMonth);
-    return (duration.inDays / 7).toInt() + 1;
+    DateTime firstDayInMonth = new DateTime(dateTime.year, dateTime.month, 1);
+    Duration duration = dateTime.difference(firstDayInMonth);
+    return duration.inDays ~/ 7 + 1;
   }
 
-  /**
-   * 本周的第几天
-   */
+  /// 本周的第几天
   static int getIndexDayInWeek(DateTime dateTime) {
-    DateTime firstdayInMonth = new DateTime(
+    DateTime firstDayInMonth = new DateTime(
       dateTime.year,
       dateTime.month,
     );
-    Duration duration = dateTime.difference(firstdayInMonth);
-    return (duration.inDays / 7).toInt() + 1;
+    Duration duration = dateTime.difference(firstDayInMonth);
+    return duration.inDays ~/ 7 + 1;
   }
 
-  /**
-   * 本月第一天，是那一周的第几天,从1开始
-   * @return 获取日期所在月视图对应的起始偏移量 the start diff with MonthView
-   */
+  /// 本月第一天，是那一周的第几天,从1开始
+  /// @return 获取日期所在月视图对应的起始偏移量 the start diff with MonthView
   static int getIndexOfFirstDayInMonth(DateTime dateTime, {int offset = 0}) {
     DateTime firstDayOfMonth = new DateTime(dateTime.year, dateTime.month, 1);
 
@@ -108,12 +82,8 @@ class DateUtil {
     return week;
   }
 
-  static List<DateModel> initCalendarForMonthView(
-      int year, int month, DateTime currentDate, int weekStart,
-      {DateModel minSelectDate,
-      DateModel maxSelectDate,
-      Map<DateModel, Object> extraDataMap,
-      int offset = 0}) {
+  static List<DateModel> initCalendarForMonthView(int year, int month, DateTime currentDate, int weekStart,
+      {DateModel minSelectDate, DateModel maxSelectDate, Map<DateModel, Object> extraDataMap, int offset = 0}) {
     print('initCalendarForMonthView start');
     weekStart = DateTime.monday;
     //获取月视图真实偏移量
@@ -122,10 +92,7 @@ class DateUtil {
     int monthDayCount = getMonthDaysCount(year, month);
 
     LogUtil.log(
-        TAG: "DateUtil",
-        message:
-            "initCalendarForMonthView:$year年$month月,有$monthDayCount天,第一天的index为${mPreDiff}");
-
+        TAG: "DateUtil", message: "initCalendarForMonthView:$year年$month月,有$monthDayCount天,第一天的index为$mPreDiff");
 
     List<DateModel> result = new List();
 
@@ -149,8 +116,7 @@ class DateUtil {
         dateModel.isCurrentMonth = false;
       } else if (i >= monthDayCount + (mPreDiff - 1)) {
         //这是下一月的几天
-        temp = lastDayOfMonth
-            .add(Duration(days: i - mPreDiff - monthDayCount + 2));
+        temp = lastDayOfMonth.add(Duration(days: i - mPreDiff - monthDayCount + 2));
         dateModel = DateModel.fromDateTime(temp);
         dateModel.isCurrentMonth = false;
       } else {
@@ -171,11 +137,11 @@ class DateUtil {
       if (extraDataMap?.isNotEmpty == true) {
         if (extraDataMap.containsKey(dateModel)) {
           dateModel.extraData = extraDataMap[dateModel];
-        }else{
-          dateModel.extraData=null;
+        } else {
+          dateModel.extraData = null;
         }
-      }else{
-        dateModel.extraData=null;
+      } else {
+        dateModel.extraData = null;
       }
 
       result.add(dateModel);
@@ -186,32 +152,21 @@ class DateUtil {
     return result;
   }
 
-  /**
-   * 月的行数
-   */
+  /// 月的行数
   static int getMonthViewLineCount(int year, int month, int offset) {
     DateTime firstDayOfMonth = new DateTime(year, month, 1);
     int monthDayCount = getMonthDaysCount(year, month);
 
     int preIndex = (firstDayOfMonth.weekday - 1 + offset) % 7;
     int lineCount = ((preIndex + monthDayCount) / 7).ceil();
-    LogUtil.log(
-        TAG: "DateUtil",
-        message:
-            "getMonthViewLineCount:$year年$month月:有$lineCount行");
+    LogUtil.log(TAG: "DateUtil", message: "getMonthViewLineCount:$year年$month月:有$lineCount行");
 
     return lineCount;
   }
 
-  /**
-   * 获取本周的7个item
-   */
-  static List<DateModel> initCalendarForWeekView(
-      int year, int month, DateTime currentDate, int weekStart,
-      {DateModel minSelectDate,
-      DateModel maxSelectDate,
-      Map<DateModel, Object> extraDataMap,
-      int offset = 0}) {
+  /// 获取本周的7个item
+  static List<DateModel> initCalendarForWeekView(int year, int month, DateTime currentDate, int weekStart,
+      {DateModel minSelectDate, DateModel maxSelectDate, Map<DateModel, Object> extraDataMap, int offset = 0}) {
     List<DateModel> items = List();
 
     int weekDay = currentDate.weekday + offset;
@@ -220,8 +175,7 @@ class DateUtil {
     DateTime firstDayOfWeek = currentDate.add(Duration(days: -weekDay));
 
     for (int i = 1; i <= 7; i++) {
-      DateModel dateModel =
-          DateModel.fromDateTime(firstDayOfWeek.add(Duration(days: i)));
+      DateModel dateModel = DateModel.fromDateTime(firstDayOfWeek.add(Duration(days: i)));
 
       //判断是否在范围内
       if (dateModel.getDateTime().isAfter(minSelectDate.getDateTime()) &&

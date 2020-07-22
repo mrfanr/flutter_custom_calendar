@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_calendar/widget/base_day_view.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
 import 'package:flutter_custom_calendar/style/style.dart';
+import 'package:flutter_custom_calendar/widget/base_day_view.dart';
 
-/**
- * 默认的利用组合widget的方式构造item
- */
+/// 默认的利用组合widget的方式构造item
 //class DefaultCombineDayWidget extends StatelessWidget {
 //  DateModel dateModel;
 //
@@ -96,8 +94,7 @@ class DefaultCombineDayWidget extends BaseCombineDayWidget {
   Widget getSelectedWidget(DateModel dateModel) {
     return Container(
       margin: EdgeInsets.all(8),
-      foregroundDecoration:
-          new BoxDecoration(border: Border.all(width: 2, color: Colors.blue)),
+      foregroundDecoration: new BoxDecoration(border: Border.all(width: 2, color: Colors.blue)),
       child: new Stack(
         alignment: Alignment.center,
         children: <Widget>[

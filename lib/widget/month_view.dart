@@ -5,13 +5,11 @@ import 'package:flutter_custom_calendar/calendar_provider.dart';
 import 'package:flutter_custom_calendar/configuration.dart';
 import 'package:flutter_custom_calendar/constants/constants.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
-import 'package:flutter_custom_calendar/utils/LogUtil.dart';
 import 'package:flutter_custom_calendar/utils/date_util.dart';
+import 'package:flutter_custom_calendar/utils/log_util.dart';
 import 'package:provider/provider.dart';
 
-/**
- * 月视图，显示整个月的日子
- */
+/// 月视图，显示整个月的日子
 class MonthView extends StatefulWidget {
   final int year;
   final int month;
@@ -31,8 +29,7 @@ class MonthView extends StatefulWidget {
   _MonthViewState createState() => _MonthViewState();
 }
 
-class _MonthViewState extends State<MonthView>
-    with AutomaticKeepAliveClientMixin {
+class _MonthViewState extends State<MonthView> with AutomaticKeepAliveClientMixin {
   List<DateModel> items = List();
 
   int lineCount;
@@ -42,10 +39,8 @@ class _MonthViewState extends State<MonthView>
   void initState() {
     super.initState();
     extraDataMap = widget.configuration.extraDataMap;
-    DateModel firstDayOfMonth =
-        DateModel.fromDateTime(DateTime(widget.year, widget.month, 1));
-    if (CacheData.getInstance().monthListCache[firstDayOfMonth]?.isNotEmpty ==
-        true) {
+    DateModel firstDayOfMonth = DateModel.fromDateTime(DateTime(widget.year, widget.month, 1));
+    if (CacheData.getInstance().monthListCache[firstDayOfMonth]?.isNotEmpty == true) {
       LogUtil.log(TAG: this.runtimeType, message: "缓存中有数据");
       items = CacheData.getInstance().monthListCache[firstDayOfMonth];
     } else {
@@ -59,9 +54,7 @@ class _MonthViewState extends State<MonthView>
 
     //第一帧后,添加监听，generation发生变化后，需要刷新整个日历
     WidgetsBinding.instance.addPostFrameCallback((callback) {
-      Provider.of<CalendarProvider>(context, listen: false)
-          .generation
-          .addListener(() async {
+      Provider.of<CalendarProvider>(context, listen: false).generation.addListener(() async {
         extraDataMap = widget.configuration.extraDataMap;
         await getItems();
       });
@@ -81,8 +74,7 @@ class _MonthViewState extends State<MonthView>
   }
 
   static Future<List<DateModel>> initCalendarForMonthView(Map map) async {
-    return DateUtil.initCalendarForMonthView(
-        map['year'], map['month'], DateTime.now(), DateTime.sunday,
+    return DateUtil.initCalendarForMonthView(map['year'], map['month'], DateTime.now(), DateTime.sunday,
         minSelectDate: map['minSelectDate'],
         maxSelectDate: map['maxSelectDate'],
         extraDataMap: map['extraDataMap'],
@@ -94,50 +86,46 @@ class _MonthViewState extends State<MonthView>
     super.build(context);
     LogUtil.log(TAG: this.runtimeType, message: "_MonthViewState build");
 
-    CalendarProvider calendarProvider =
-        Provider.of<CalendarProvider>(context, listen: false);
-    CalendarConfiguration configuration =
-        calendarProvider.calendarConfiguration;
+    CalendarProvider calendarProvider = Provider.of<CalendarProvider>(context, listen: false);
+    CalendarConfiguration configuration = calendarProvider.calendarConfiguration;
 
     return new GridView.builder(
-        addAutomaticKeepAlives: true,
-        padding: EdgeInsets.zero,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7, mainAxisSpacing: configuration.verticalSpacing),
-        itemCount: items.isEmpty ? 0 : items.length,
-        itemBuilder: (context, index) {
-          DateModel dateModel = items[index];
-          //判断是否被选择
-          if (configuration.selectMode == CalendarConstants.MODE_MULTI_SELECT) {
-            if (calendarProvider.selectedDateList.contains(dateModel)) {
-              dateModel.isSelected = true;
-            } else {
-              dateModel.isSelected = false;
-            }
+      addAutomaticKeepAlives: true,
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 7, mainAxisSpacing: configuration.verticalSpacing),
+      itemCount: items.isEmpty ? 0 : items.length,
+      itemBuilder: (context, index) {
+        DateModel dateModel = items[index];
+        //判断是否被选择
+        if (configuration.selectMode == CalendarConstants.MODE_MULTI_SELECT) {
+          if (calendarProvider.selectedDateList.contains(dateModel)) {
+            dateModel.isSelected = true;
           } else {
-            if (calendarProvider.selectDateModel == dateModel) {
-              dateModel.isSelected = true;
-            } else {
-              dateModel.isSelected = false;
-            }
+            dateModel.isSelected = false;
           }
+        } else {
+          if (calendarProvider.selectDateModel == dateModel) {
+            dateModel.isSelected = true;
+          } else {
+            dateModel.isSelected = false;
+          }
+        }
 
-          return ItemContainer(
-            dateModel: dateModel,
-            key: ObjectKey(
-                dateModel), //这里使用objectKey，保证可以刷新。原因1：跟flutter的刷新机制有关。原因2：statefulElement持有state。
-          );
-        });
+        return ItemContainer(
+          dateModel: dateModel,
+          key: ObjectKey(dateModel), //这里使用objectKey，保证可以刷新。原因1：跟flutter的刷新机制有关。原因2：statefulElement持有state。
+        );
+      },
+    );
   }
 
   @override
   bool get wantKeepAlive => true;
 }
 
-/**
- * 多选模式，包装item，这样的话，就只需要刷新当前点击的item就行了，不需要刷新整个页面
- */
+/// 多选模式，包装item，这样的话，就只需要刷新当前点击的item就行了，不需要刷新整个页面
 class ItemContainer extends StatefulWidget {
   final DateModel dateModel;
 
@@ -172,9 +160,7 @@ class ItemContainerState extends State<ItemContainer> {
 //    });
   }
 
-  /**
-   * 提供方法给外部，可以调用这个方法进行刷新item
-   */
+  /// 提供方法给外部，可以调用这个方法进行刷新item
   void refreshItem(bool v) {
     /**
         Exception caught by gesture
@@ -199,9 +185,7 @@ class ItemContainerState extends State<ItemContainer> {
       //点击整个item都会触发事件
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        LogUtil.log(
-            TAG: this.runtimeType,
-            message: "GestureDetector onTap: $dateModel}");
+        LogUtil.log(TAG: this.runtimeType, message: "GestureDetector onTap: $dateModel}");
 
         //范围外不可点击
         if (!dateModel.isInRange) {
@@ -219,8 +203,7 @@ class ItemContainerState extends State<ItemContainer> {
             calendarProvider.selectedDateList.remove(dateModel);
           } else {
             //多选，判断是否超过限制，超过范围
-            if (calendarProvider.selectedDateList.length ==
-                configuration.maxMultiSelectCount) {
+            if (calendarProvider.selectedDateList.length == configuration.maxMultiSelectCount) {
               if (configuration.multiSelectOutOfSize != null) {
                 configuration.multiSelectOutOfSize();
               }

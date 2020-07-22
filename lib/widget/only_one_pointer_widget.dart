@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
-/**
- * 单点触摸的方案：https://xbuba.com/questions/51712287
- */
+/// 单点触摸的方案：https://xbuba.com/questions/51712287
 class OnlyOnePointerRecognizer extends OneSequenceGestureRecognizer {
   int _p = 0;
 
@@ -41,12 +39,9 @@ class OnlyOnePointerRecognizerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RawGestureDetector(
       gestures: <Type, GestureRecognizerFactory>{
-        OnlyOnePointerRecognizer:
-            GestureRecognizerFactoryWithHandlers<OnlyOnePointerRecognizer>(
+        OnlyOnePointerRecognizer: GestureRecognizerFactoryWithHandlers<OnlyOnePointerRecognizer>(
           () => OnlyOnePointerRecognizer(),
-          (OnlyOnePointerRecognizer instance) {
-
-          },
+          (OnlyOnePointerRecognizer instance) {},
         ),
       },
       child: child,

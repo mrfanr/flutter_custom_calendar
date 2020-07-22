@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_calendar/widget/base_day_view.dart';
 import 'package:flutter_custom_calendar/model/date_model.dart';
 import 'package:flutter_custom_calendar/style/style.dart';
+import 'package:flutter_custom_calendar/widget/base_day_view.dart';
 
 /**
  * 这里定义成一个StatelessWidget，状态是外部的父控件传进来参数控制就行，自己不弄state类
@@ -66,17 +66,14 @@ class DefaultCustomDayWidget extends BaseCustomDayWidget {
 //  }
 //}
 
-/**
- * 默认的样式
- */
+/// 默认的样式
 void defaultDrawNormal(DateModel dateModel, Canvas canvas, Size size) {
   //顶部的文字
   TextPainter dayTextPainter = new TextPainter()
     ..text = TextSpan(
-        text: dateModel.day.toString(),
-        style: dateModel.isCurrentDay
-            ? currentDayTextStyle
-            : currentMonthTextStyle)
+      text: dateModel.day.toString(),
+      style: dateModel.isCurrentDay ? currentDayTextStyle : currentMonthTextStyle,
+    )
     ..textDirection = TextDirection.ltr
     ..textAlign = TextAlign.center;
 
@@ -93,9 +90,7 @@ void defaultDrawNormal(DateModel dateModel, Canvas canvas, Size size) {
   lunarTextPainter.paint(canvas, Offset(0, size.height / 2));
 }
 
-/**
- * 被选中的样式
- */
+/// 被选中的样式
 void defaultDrawSelected(DateModel dateModel, Canvas canvas, Size size) {
   //绘制背景
   Paint backGroundPaint = new Paint()
@@ -104,14 +99,13 @@ void defaultDrawSelected(DateModel dateModel, Canvas canvas, Size size) {
     ..strokeWidth = 2;
   double padding = 8;
   canvas.drawRect(
-      Rect.fromPoints(Offset(padding, padding),
-          Offset(size.width - padding, size.height - padding)),
-      backGroundPaint);
+    Rect.fromPoints(Offset(padding, padding), Offset(size.width - padding, size.height - padding)),
+    backGroundPaint,
+  );
 
   //顶部的文字
   TextPainter dayTextPainter = new TextPainter()
-    ..text =
-        TextSpan(text: dateModel.day.toString(), style: currentMonthTextStyle)
+    ..text = TextSpan(text: dateModel.day.toString(), style: currentMonthTextStyle)
     ..textDirection = TextDirection.ltr
     ..textAlign = TextAlign.center;
 
